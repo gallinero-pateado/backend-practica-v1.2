@@ -1,36 +1,48 @@
 package main
 
 import (
-    "fmt"
-    "log"
-    "net/http"
-    "practica/internal/database"
-    "practica/internal/auth"      // Añadir el paquete de auth
-    "practica/pkg/config"
-    "practica/api"
+	"log"
+	"practica/internal/database"
+	"practica/internal/models"
+	"practica/internal/auth"
+	"practica/pkg/config"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-    // Cargar las configuraciones desde el archivo .env
-    err := config.LoadConfig("config/app.env")
-    if err != nil {
-        log.Fatalf("Error cargando configuración: %v", err)
-    }
+	// Cargar las configuraciones desde el archivo .env
+	err := config.LoadConfig("config/app.env")
+	if err != nil {
+		log.Fatalf("Error cargando configuración: %v", err)
+	}
 
-    // Inicializar Firebase
-    err = auth.InitFirebase()
-    if err != nil {
-        log.Fatalf("Error inicializando Firebase: %v", err)
-    }
+	// Inicializar la base de datos
+	err = database.InitDatabase()
+	if err != nil {
+		log.Fatalf("Error inicializando la base de datos: %v", err)
+	}
 
-    // Conectar a la base de datos Supabase
-    err = database.Connect()
-    if err != nil {
-        log.Fatalf("Error conectando a Supabase: %v", err)
-    }
+	// Verificar si la tabla usuarios ya existe
+	if !database.DB.Migrator().HasTable(&models.Usuario{}) {
+		// Si no existe, migrar el modelo
+		err = database.DB.AutoMigrate(&models.Usuario{})
+		if err != nil {
+			log.Fatalf("Error al migrar modelos: %v", err)
+		}
+	}
 
-    // Configurar rutas y arrancar el servidor
-    router := api.SetupRoutes()
-    fmt.Println("Servidor corriendo en http://localhost:8080")
-    log.Fatal(http.ListenAndServe(":8080", router))
+	// Inicializar Firebase
+	err = auth.InitFirebase()
+	if err != nil {
+		log.Fatalf("Error inicializando Firebase: %v", err)
+	}
+
+	// Crear la instancia de Gin
+	router := gin.Default()
+
+	// Registrar rutas
+	router.POST("/register", auth.RegisterHandler)
+
+	// Iniciar el servidor
+	router.Run(":8080")
 }

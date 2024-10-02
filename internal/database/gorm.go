@@ -1,0 +1,33 @@
+package database
+
+import (
+	"fmt"
+	"log"
+	"os"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
+)
+
+var DB *gorm.DB
+
+// InitDatabase inicializa la conexión con la base de datos
+func InitDatabase() error {
+	// Construir la URL de conexión a PostgreSQL
+	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=require",
+		os.Getenv("SUPABASE_HOST"),
+		os.Getenv("SUPABASE_USER"),
+		os.Getenv("SUPABASE_PASSWORD"),
+		os.Getenv("SUPABASE_DB"),
+		os.Getenv("SUPABASE_PORT"))
+
+	// Conectar a la base de datos usando GORM
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Error al conectar a la base de datos: %v", err)
+		return err
+	}
+
+	DB = db
+	log.Println("Conexión a la base de datos exitosa con GORM")
+	return nil
+}
