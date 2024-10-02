@@ -3,14 +3,13 @@ package api
 import (
 	"practica/internal/auth"
 
-	"github.com/gorilla/mux"
+	"github.com/gin-gonic/gin"
 )
 
-func SetupRoutes() *mux.Router {
-	router := mux.NewRouter()
+func SetupRoutes() *gin.Engine {
+	router := gin.Default()
 
-	// Ruta para autenticación con Firebase
-	router.HandleFunc("/verify", auth.VerifyHandler).Methods("POST")
+	router.POST("/register", auth.RegisterHandler)
 
 	return router
 }

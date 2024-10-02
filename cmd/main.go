@@ -2,11 +2,11 @@ package main
 
 import (
 	"log"
+	"practica/api"
+	"practica/internal/auth"
 	"practica/internal/database"
 	"practica/internal/models"
-	"practica/internal/auth"
 	"practica/pkg/config"
-	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -37,11 +37,8 @@ func main() {
 		log.Fatalf("Error inicializando Firebase: %v", err)
 	}
 
-	// Crear la instancia de Gin
-	router := gin.Default()
-
 	// Registrar rutas
-	router.POST("/register", auth.RegisterHandler)
+	router := api.SetupRoutes()
 
 	// Iniciar el servidor
 	router.Run(":8080")
