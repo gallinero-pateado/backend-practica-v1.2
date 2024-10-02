@@ -21,12 +21,15 @@ func InitDatabase() error {
 		os.Getenv("SUPABASE_DB"),
 		os.Getenv("SUPABASE_PORT"))
 
-	// Conectar a la base de datos usando GORM
+	// Conectar a la base de datos
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatalf("Error al conectar a la base de datos: %v", err)
 		return err
 	}
+
+	// Limpiar declaraciones preparadas previas
+	db.Exec("DEALLOCATE ALL")
 
 	DB = db
 	log.Println("Conexión a la base de datos exitosa con GORM")
