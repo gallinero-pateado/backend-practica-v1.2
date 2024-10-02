@@ -7,11 +7,12 @@ import (
 	"practica/internal/models"
 	"firebase.google.com/go/v4/auth"
 	"github.com/gin-gonic/gin"
-	"time"
 )
 
+// RegisterRequest estructura de los datos recibidos
 type RegisterRequest struct {
 	Email     string `json:"email" binding:"required"`
+	Password  string `json:"password" binding:"required"`
 	Nombres   string `json:"nombres" binding:"required"`
 	Apellidos string `json:"apellidos" binding:"required"`
 }
@@ -24,10 +25,10 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	// Crear el usuario en Firebase
+	// Crear el usuario en Firebase con email y password
 	params := (&auth.UserToCreate{}).
 		Email(req.Email).
-		Password("password123") // Asegúrate de que la contraseña se gestiona solo en Firebase
+		Password(req.Password)
 
 	user, err := authClient.CreateUser(context.Background(), params)
 	if err != nil {
@@ -35,23 +36,36 @@ func RegisterHandler(c *gin.Context) {
 		return
 	}
 
-	// Crear el usuario en la base de datos usando GORM
+	// Crear el usuario en la base de datos sin almacenar la contraseña
 	usuario := models.Usuario{
-		Correo:            req.Email,
-		Nombres:           req.Nombres,
-		Apellidos:         req.Apellidos,
-		Fecha_creacion:    time.Now(),
-		Rol:               "estudiante",
-		Firebase_usuario:  user.UID,
+		Correo:           req.Email,
+		Nombres:          req.Nombres,
+		Apellidos:        req.Apellidos,
+		Firebase_usuario: user.UID,
+		Rol:              "estudiante", // Rol por defecto
 	}
 
-	// Guardar el usuario en la base de datos
 	result := database.DB.Create(&usuario)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar el usuario en la base de datos: " + result.Error.Error()})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar el usuario en la base de datos"})
+		return
+	}
+
+	// Generar token de verificación de correo
+	token, err := GenerateVerificationToken(req.Email)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al generar el token de verificación"})
+		return
+	}
+
+	// Enviar correo de verificación
+	err = SendVerificationEmail(req.Email, token)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al enviar el correo de verificación"})
 		return
 	}
 
 	// Respuesta exitosa
-	c.JSON(http.StatusOK, gin.H{"message": "Usuario creado correctamente", "firebase_uid": user.UID})
+	c.JSON(http.StatusOK, gin.H{"message": "Usuario creado correctamente. Verifica tu correo", "firebase_uid": user.UID})
 }
+

@@ -11,6 +11,7 @@ func SetupRoutes() *gin.Engine {
 
 	router.POST("/register", auth.RegisterHandler)
 	router.POST("/login", auth.LoginHandler)
+	router.GET("verify-email", auth.VerifyEmailHandler)
 
 	// Rutas protegidas
 	protected := router.Group("/").Use(auth.AuthMiddleware)  // Agrupar las rutas protegidas con el middleware
