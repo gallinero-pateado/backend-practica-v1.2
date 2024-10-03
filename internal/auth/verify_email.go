@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"net/http"
 	"net/smtp"
 	"os"
@@ -9,11 +10,12 @@ import (
 	"practica/internal/database"
 	"practica/internal/models"
 
+	"firebase.google.com/go/v4/auth"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
 )
 
-var secretKey = []byte(os.Getenv("JWT_SECRET_KEY")) // Asegúrate de tener una clave secreta en tu .env
+var secretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
 // Función para generar el token de verificación
 func GenerateVerificationToken(email string) (string, error) {
@@ -64,6 +66,20 @@ func VerifyEmailHandler(c *gin.Context) {
 		result := database.DB.Model(&usuario).Where("correo = ?", email).Update("Id_estado_usuario", true)
 		if result.Error != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al actualizar el estado del usuario"})
+			return
+		}
+
+		// Buscar el usuario en Firebase
+		userRecord, err := authClient.GetUserByEmail(context.Background(), email)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al obtener usuario de Firebase"})
+			return
+		}
+
+		// Actualizar el estado del correo como verificado en Firebase
+		_, err = authClient.UpdateUser(context.Background(), userRecord.UID, (&auth.UserToUpdate{}).EmailVerified(true))
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al actualizar el estado de verificación en Firebase"})
 			return
 		}
 
