@@ -7,6 +7,7 @@ import (
 	"os"
 	"practica/internal/database"
 	"practica/internal/models"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -22,6 +23,16 @@ type FirebaseLoginResponse struct {
 }
 
 // LoginHandler maneja el inicio de sesión
+// @Summary Inicia sesión en la aplicación
+// @Description Permite a un usuario iniciar sesión con su email y contraseña
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param login body LoginRequest true "Datos de inicio de sesión"
+// @Success 200 {object} FirebaseLoginResponse
+// @Failure 400 {object} ErrorResponse
+// @Failure 401 {object} ErrorResponse
+// @Router /login [post]
 func LoginHandler(c *gin.Context) {
 	var req LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {

@@ -9,6 +9,13 @@ import (
 )
 
 // AuthMiddleware verifica el token JWT
+// AuthMiddleware verifica el token JWT
+// @Summary Verifica el token JWT
+// @Description Middleware que verifica el token JWT en el encabezado Authorization
+// @Tags middleware
+// @Success 200 {string} string "Token verificado correctamente"
+// @Failure 401 {object} ErrorResponse "No se proporcionó token o token malformado"
+// @Router /auth_middleware [get]
 func AuthMiddleware(c *gin.Context) {
 	// Obtener el token del encabezado Authorization
 	authHeader := c.GetHeader("Authorization")

@@ -17,7 +17,14 @@ import (
 
 var secretKey = []byte(os.Getenv("JWT_SECRET_KEY"))
 
-// Función para generar el token de verificación
+// GenerateVerificationToken genera un token de verificación
+// @Summary Genera un token de verificación
+// @Description Genera un token JWT para la verificación de correo electrónico
+// @Tags auth
+// @Param email query string true "Correo electrónico"
+// @Success 200 {string} string "Token de verificación"
+// @Failure 500 {object} ErrorResponse
+// @Router /generate_verification_token [get]
 func GenerateVerificationToken(email string) (string, error) {
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
@@ -27,7 +34,15 @@ func GenerateVerificationToken(email string) (string, error) {
 	return token.SignedString(secretKey)
 }
 
-// Función para enviar el correo de verificación
+// SendVerificationEmail envía un correo de verificación
+// @Summary Envía un correo de verificación
+// @Description Envía un correo electrónico con un token de verificación
+// @Tags auth
+// @Param email query string true "Correo electrónico"
+// @Param token query string true "Token de verificación"
+// @Success 200 {string} string "Correo enviado"
+// @Failure 500 {object} ErrorResponse
+// @Router /send_verification_email [post]
 func SendVerificationEmail(email, token string) error {
 	from := os.Getenv("SMTP_USER")
 	password := os.Getenv("SMTP_PASSWORD")

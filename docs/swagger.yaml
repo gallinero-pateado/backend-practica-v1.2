@@ -1,0 +1,224 @@
+basePath: /api/v1
+definitions:
+  auth.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  auth.FirebaseLoginResponse:
+    properties:
+      idToken:
+        type: string
+    type: object
+  auth.LoginRequest:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  auth.ProfileUpdateRequest:
+    properties:
+      ano_ingreso:
+        type: string
+      fecha_nacimiento:
+        type: string
+      foto_perfil:
+        type: string
+      id_carrera:
+        type: integer
+    type: object
+  auth.ProfileUpdateResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  auth.RegisterRequest:
+    properties:
+      apellidos:
+        type: string
+      email:
+        type: string
+      nombres:
+        type: string
+      password:
+        type: string
+    required:
+    - apellidos
+    - email
+    - nombres
+    - password
+    type: object
+  auth.RegisterResponse:
+    properties:
+      firebase_uid:
+        type: string
+      message:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Esta es una API de ejemplo para Practica.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Practica API
+  version: "1.0"
+paths:
+  /auth_middleware:
+    get:
+      description: Middleware que verifica el token JWT en el encabezado Authorization
+      responses:
+        "200":
+          description: Token verificado correctamente
+          schema:
+            type: string
+        "401":
+          description: No se proporcionó token o token malformado
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Verifica el token JWT
+      tags:
+      - middleware
+  /complete_profile:
+    post:
+      consumes:
+      - application/json
+      description: Permite a los usuarios completar o actualizar su perfil
+      parameters:
+      - description: Datos del perfil
+        in: body
+        name: profile
+        required: true
+        schema:
+          $ref: '#/definitions/auth.ProfileUpdateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.ProfileUpdateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Completa o actualiza el perfil del usuario
+      tags:
+      - auth
+  /generate_verification_token:
+    get:
+      description: Genera un token JWT para la verificación de correo electrónico
+      parameters:
+      - description: Correo electrónico
+        in: query
+        name: email
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Token de verificación
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Genera un token de verificación
+      tags:
+      - auth
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Permite a un usuario iniciar sesión con su email y contraseña
+      parameters:
+      - description: Datos de inicio de sesión
+        in: body
+        name: login
+        required: true
+        schema:
+          $ref: '#/definitions/auth.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.FirebaseLoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+        "401":
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Inicia sesión en la aplicación
+      tags:
+      - auth
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: Registra un nuevo usuario con email y contraseña
+      parameters:
+      - description: Datos de registro
+        in: body
+        name: register
+        required: true
+        schema:
+          $ref: '#/definitions/auth.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/auth.RegisterResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Registra un nuevo usuario
+      tags:
+      - auth
+  /send_verification_email:
+    post:
+      description: Envía un correo electrónico con un token de verificación
+      parameters:
+      - description: Correo electrónico
+        in: query
+        name: email
+        required: true
+        type: string
+      - description: Token de verificación
+        in: query
+        name: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Correo enviado
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/auth.ErrorResponse'
+      summary: Envía un correo de verificación
+      tags:
+      - auth
+swagger: "2.0"
