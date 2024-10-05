@@ -2,6 +2,7 @@ package api
 
 import (
 	"practica/internal/auth"
+	"practica/internal/upload"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -23,6 +24,8 @@ func SetupRoutes() *gin.Engine {
 	router.GET("/verify-email", auth.VerifyEmailHandler)
 	router.POST("/password-reset", auth.SendPasswordResetEmailHandler)
 	router.POST("/resend-verification", auth.ResendVerificationEmailHandler)
+
+	router.POST("/upload-image", upload.UploadImageHandler)
 
 	// Rutas protegidas
 	protected := router.Group("/").Use(auth.AuthMiddleware) // Agrupar las rutas protegidas con el middleware
