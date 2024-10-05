@@ -1,6 +1,7 @@
 package api
 
 import (
+	Cempresa "practica/Crudempresa"
 	"practica/internal/auth"
 
 	"github.com/gin-contrib/cors"
@@ -23,6 +24,7 @@ func SetupRoutes() *gin.Engine {
 	router.GET("/verify-email", auth.VerifyEmailHandler)
 	router.POST("/password-reset", auth.SendPasswordResetEmailHandler)
 	router.POST("/resend-verification", auth.ResendVerificationEmailHandler)
+	router.POST("/Create-practicas", Cempresa.Createpractica)
 
 	// Rutas protegidas
 	protected := router.Group("/").Use(auth.AuthMiddleware) // Agrupar las rutas protegidas con el middleware
