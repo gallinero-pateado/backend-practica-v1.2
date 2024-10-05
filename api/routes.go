@@ -26,6 +26,7 @@ func SetupRoutes() *gin.Engine {
 	router.POST("/resend-verification", auth.ResendVerificationEmailHandler)
 	// rutas crud practicas
 	router.POST("/Create-practicas", Cempresa.Createpractica)
+	router.GET("/Get-practicas", Cempresa.GetAllPracticas)
 	router.PUT("/Update-practicas/:id", Cempresa.UpdatePractica)
 	router.DELETE("/Delete-practica/:id", Cempresa.DeletePractica)
 
