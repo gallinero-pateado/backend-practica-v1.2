@@ -1,6 +1,7 @@
 package api
 
 import (
+	Cempresa "practica/Crudempresa"
 	"practica/internal/auth"
 	"practica/internal/upload"
 
@@ -24,6 +25,11 @@ func SetupRoutes() *gin.Engine {
 	router.GET("/verify-email", auth.VerifyEmailHandler)
 	router.POST("/password-reset", auth.SendPasswordResetEmailHandler)
 	router.POST("/resend-verification", auth.ResendVerificationEmailHandler)
+	// rutas crud practicas
+	router.POST("/Create-practicas", Cempresa.Createpractica)
+	router.GET("/Get-practicas", Cempresa.GetAllPracticas)
+	router.PUT("/Update-practicas/:id", Cempresa.UpdatePractica)
+	router.DELETE("/Delete-practica/:id", Cempresa.DeletePractica)
 
 	router.POST("/upload-image", upload.UploadImageHandler)
 
