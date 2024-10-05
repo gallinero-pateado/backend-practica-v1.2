@@ -10,7 +10,7 @@ import (
 )
 
 // RegisterRequest estructura de los datos recibidos
-type practicasRequest struct {
+type practicaRequest struct {
 	Titulo             string    `json:"Titulo"`
 	Descripcion        string    `json:"Descripcion"`
 	Id_empresa         int       `json:"Id_Empresa"`
@@ -24,7 +24,7 @@ type practicasRequest struct {
 }
 
 func Createpractica(c *gin.Context) {
-	var req practicasRequest
+	var req practicaRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
