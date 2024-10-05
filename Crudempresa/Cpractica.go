@@ -49,7 +49,7 @@ func Createpractica(c *gin.Context) {
 
 	result := database.DB.Create(&practica)
 	if result.Error != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar el usuario en la base de datos"})
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error al guardar la practica en la base de datos"})
 		return
 	}
 
