@@ -54,6 +54,7 @@ func CompleteProfileHandler(c *gin.Context) {
 		Ano_ingreso:      req.AnoIngreso,
 		Id_carrera:       req.IdCarrera,
 		Foto_perfil:      req.FotoPerfil,
+		PerfilCompletado: true,
 	})
 
 	if result.Error != nil {

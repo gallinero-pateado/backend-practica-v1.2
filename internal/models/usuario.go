@@ -15,6 +15,7 @@ type Usuario struct {
 	Foto_perfil       string    `json:"Foto_Perfil"`
 	Fecha_creacion    time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	Rol               string    `json:"Rol"`
+	PerfilCompletado  bool      `json:"PerfilCompletado"`
 }
 
 // TableName establece el nombre de la tabla para GORM
