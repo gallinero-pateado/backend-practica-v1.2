@@ -12,7 +12,7 @@ type ProfileUpdateRequest struct {
 	FechaNacimiento string `json:"fecha_nacimiento"`
 	AnoIngreso      string `json:"ano_ingreso"`
 	IdCarrera       uint   `json:"id_carrera"`
-	FotoPerfil      string `json:"foto_perfil"`
+	FotoPerfil      string `json:"foto_perfil"` // Este campo ahora recibirá la URL de la imagen
 }
 
 // SuccessResponse representa la estructura para respuestas exitosas
@@ -22,7 +22,7 @@ type SuccessResponse struct {
 
 // CompleteProfileHandler permite a los usuarios completar o actualizar su perfil
 // @Summary Completar o actualizar perfil de usuario
-// @Description Permite a los usuarios autenticados completar o actualizar su perfil
+// @Description Permite a los usuarios autenticados completar o actualizar su perfil, incluida la foto de perfil
 // @Tags profile
 // @Accept json
 // @Produce json
@@ -33,7 +33,6 @@ type SuccessResponse struct {
 // @Failure 401 {object} ErrorResponse "Usuario no autenticado"
 // @Failure 500 {object} ErrorResponse "Error al actualizar el perfil"
 // @Router /complete-profile [post]
-// CompleteProfileHandler permite a los usuarios completar o actualizar su perfil
 func CompleteProfileHandler(c *gin.Context) {
 	uid, exists := c.Get("uid")
 	if !exists {
@@ -41,19 +40,20 @@ func CompleteProfileHandler(c *gin.Context) {
 		return
 	}
 
+	// Obtener los datos del perfil desde el cuerpo de la solicitud
 	var req ProfileUpdateRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Datos inválidos"})
 		return
 	}
 
-	// Actualizar el perfil en la base de datos
+	// Actualizar el perfil en la base de datos, incluyendo la URL de la imagen
 	var usuario models.Usuario
 	result := database.DB.Model(&usuario).Where("firebase_usuario = ?", uid).Updates(models.Usuario{
 		Fecha_nacimiento: req.FechaNacimiento,
 		Ano_ingreso:      req.AnoIngreso,
 		Id_carrera:       req.IdCarrera,
-		Foto_perfil:      req.FotoPerfil,
+		Foto_perfil:      req.FotoPerfil, // Se espera que este campo sea la URL de la imagen ya subida
 		PerfilCompletado: true,
 	})
 

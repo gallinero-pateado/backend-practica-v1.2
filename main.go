@@ -6,6 +6,7 @@ import (
 	"practica/internal/auth"
 	"practica/internal/database"
 	"practica/internal/models"
+	"practica/internal/storage"
 	"practica/pkg/config"
 
 	_ "practica/docs" // Importar la documentación generada
@@ -39,6 +40,12 @@ func main() {
 	err = auth.InitFirebase()
 	if err != nil {
 		log.Fatalf("Error inicializando Firebase: %v", err)
+	}
+
+	// Aquí solo asignamos con `=`, ya que la variable `err` ya fue declarada antes
+	err = storage.InitStorage()
+	if err != nil {
+		log.Fatalf("Error inicializando Supabase Storage: %v", err)
 	}
 
 	// Registrar rutas

@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/complete-profile": {
             "post": {
-                "description": "Permite a los usuarios autenticados completar o actualizar su perfil",
+                "description": "Permite a los usuarios autenticados completar o actualizar su perfil, incluida la foto de perfil",
                 "consumes": [
                     "application/json"
                 ],
@@ -263,6 +263,50 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/upload-image": {
+            "post": {
+                "description": "Sube una imagen al bucket de Supabase y devuelve la URL pública",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "upload"
+                ],
+                "summary": "Subir una imagen de perfil",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Imagen a subir",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "URL de la imagen subida",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Error al subir la imagen",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -332,6 +376,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "foto_perfil": {
+                    "description": "Este campo ahora recibirá la URL de la imagen",
                     "type": "string"
                 },
                 "id_carrera": {
