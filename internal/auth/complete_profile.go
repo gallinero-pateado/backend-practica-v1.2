@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"practica/internal/database"
 	"practica/internal/models"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -14,6 +15,24 @@ type ProfileUpdateRequest struct {
 	FotoPerfil      string `json:"foto_perfil"`
 }
 
+// SuccessResponse representa la estructura para respuestas exitosas
+type SuccessResponse struct {
+	Message string `json:"message"`
+}
+
+// CompleteProfileHandler permite a los usuarios completar o actualizar su perfil
+// @Summary Completar o actualizar perfil de usuario
+// @Description Permite a los usuarios autenticados completar o actualizar su perfil
+// @Tags profile
+// @Accept json
+// @Produce json
+// @Param Authorization header string true "Bearer token"
+// @Param profile body ProfileUpdateRequest true "Datos para actualizar el perfil"
+// @Success 200 {object} SuccessResponse "Perfil actualizado correctamente"
+// @Failure 400 {object} ErrorResponse "Datos inválidos"
+// @Failure 401 {object} ErrorResponse "Usuario no autenticado"
+// @Failure 500 {object} ErrorResponse "Error al actualizar el perfil"
+// @Router /complete-profile [post]
 // CompleteProfileHandler permite a los usuarios completar o actualizar su perfil
 func CompleteProfileHandler(c *gin.Context) {
 	uid, exists := c.Get("uid")

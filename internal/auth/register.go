@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"practica/internal/database"
 	"practica/internal/models"
+
 	"firebase.google.com/go/v4/auth"
 	"github.com/gin-gonic/gin"
 )
@@ -17,6 +18,23 @@ type RegisterRequest struct {
 	Apellidos string `json:"apellidos" binding:"required"`
 }
 
+// RegisterResponse estructura de la respuesta de registro
+type RegisterResponse struct {
+	Message     string `json:"message"`
+	FirebaseUID string `json:"firebase_uid"`
+}
+
+// RegisterHandler maneja el registro del usuario
+// @Summary Registra un nuevo usuario
+// @Description Crea un nuevo usuario en Firebase y lo guarda en la base de datos local
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body RegisterRequest true "Datos del usuario a registrar"
+// @Success 200 {object} RegisterResponse "Usuario registrado correctamente"
+// @Failure 400 {object} RegisterResponse "Solicitud inválida"
+// @Failure 500 {object} RegisterResponse "Error interno del servidor"
+// @Router /register [post]
 // RegisterHandler maneja el registro del usuario
 func RegisterHandler(c *gin.Context) {
 	var req RegisterRequest
@@ -68,4 +86,3 @@ func RegisterHandler(c *gin.Context) {
 	// Respuesta exitosa
 	c.JSON(http.StatusOK, gin.H{"message": "Usuario creado correctamente. Verifica tu correo", "firebase_uid": user.UID})
 }
-

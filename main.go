@@ -7,6 +7,11 @@ import (
 	"practica/internal/database"
 	"practica/internal/models"
 	"practica/pkg/config"
+
+	_ "practica/docs" // Importar la documentación generada
+
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func main() {
@@ -38,6 +43,9 @@ func main() {
 
 	// Registrar rutas
 	router := api.SetupRoutes()
+
+	// Agregar la ruta de Swagger
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Iniciar el servidor
 	router.Run(":8080")

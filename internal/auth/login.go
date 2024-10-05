@@ -7,6 +7,7 @@ import (
 	"os"
 	"practica/internal/database"
 	"practica/internal/models"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +22,28 @@ type FirebaseLoginResponse struct {
 	IDToken string `json:"idToken"`
 }
 
+// LoginResponse representa la respuesta del inicio de sesión
+type LoginResponse struct {
+	Token string `json:"token"`
+	UID   string `json:"uid"`
+}
+
+// ErrorResponse representa la estructura de un error
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
+// LoginHandler maneja el inicio de sesión
+// @Summary Inicia sesión un usuario
+// @Description Autentica al usuario utilizando Firebase y devuelve un token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body LoginRequest true "Datos de inicio de sesión"
+// @Success 200 {object} LoginResponse "Inicio de sesión exitoso"
+// @Failure 400 {object} ErrorResponse "Datos inválidos"
+// @Failure 401 {object} ErrorResponse "Credenciales incorrectas"
+// @Router /login [post]
 // LoginHandler maneja el inicio de sesión
 func LoginHandler(c *gin.Context) {
 	var req LoginRequest

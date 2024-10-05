@@ -14,6 +14,17 @@ type PasswordResetRequest struct {
 	Email string `json:"email" binding:"required"`
 }
 
+// SendPasswordResetEmailHandler maneja el envío del correo de recuperación
+// @Summary Envía un correo de recuperación de contraseña
+// @Description Permite a los usuarios recuperar su contraseña mediante un correo de recuperación
+// @Tags password
+// @Accept json
+// @Produce json
+// @Param email body PasswordResetRequest true "Correo del usuario"
+// @Success 200 {object} SuccessResponse "Correo de recuperación enviado con éxito"
+// @Failure 400 {object} ErrorResponse "Email requerido"
+// @Failure 500 {object} ErrorResponse "Error al enviar el correo de recuperación"
+// @Router /password-reset [post]
 // Handler para enviar correo de recuperación de contraseña usando la API REST de Firebase
 func SendPasswordResetEmailHandler(c *gin.Context) {
 	var req PasswordResetRequest
