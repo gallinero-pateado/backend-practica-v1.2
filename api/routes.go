@@ -24,8 +24,10 @@ func SetupRoutes() *gin.Engine {
 	router.GET("/verify-email", auth.VerifyEmailHandler)
 	router.POST("/password-reset", auth.SendPasswordResetEmailHandler)
 	router.POST("/resend-verification", auth.ResendVerificationEmailHandler)
+	// rutas crud practicas
 	router.POST("/Create-practicas", Cempresa.Createpractica)
 	router.PUT("/Update-practicas/:id", Cempresa.UpdatePractica)
+	router.DELETE("/Delete-practica/:id", Cempresa.DeletePractica)
 
 	// Rutas protegidas
 	protected := router.Group("/").Use(auth.AuthMiddleware) // Agrupar las rutas protegidas con el middleware
