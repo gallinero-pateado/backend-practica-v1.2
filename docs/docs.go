@@ -166,6 +166,53 @@ const docTemplate = `{
                 }
             }
         },
+        "/profile-status": {
+            "get": {
+                "description": "Retorna si el perfil ha sido completado o no",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "profile"
+                ],
+                "summary": "Obtener estado del perfil",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Estado del perfil",
+                        "schema": {
+                            "$ref": "#/definitions/auth.ProfileStatusResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Datos inválidos",
+                        "schema": {
+                            "$ref": "#/definitions/auth.ErrorResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado",
+                        "schema": {
+                            "$ref": "#/definitions/auth.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "schema": {
+                            "$ref": "#/definitions/auth.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "description": "Crea un nuevo usuario en Firebase y lo guarda en la base de datos local",
@@ -434,6 +481,14 @@ const docTemplate = `{
             "properties": {
                 "email": {
                     "type": "string"
+                }
+            }
+        },
+        "auth.ProfileStatusResponse": {
+            "type": "object",
+            "properties": {
+                "perfil_completado": {
+                    "type": "boolean"
                 }
             }
         },

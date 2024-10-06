@@ -40,6 +40,7 @@ func SetupRoutes() *gin.Engine {
 	{
 		protected.POST("/complete-profile", auth.CompleteProfileHandler) // Ruta para completar perfil
 		protected.POST("/upload-image", upload.UploadImageHandler)       // Ruta para subir imágenes
+		protected.GET("/profile-status", auth.GetProfileStatusHandler)   // Ruta para obtener el estado del perfil
 	}
 
 	return router
