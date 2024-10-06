@@ -31,6 +31,8 @@ func SetupRoutes() *gin.Engine {
 	router.GET("/Get-practicas", Cempresa.GetAllPracticas)
 	router.PUT("/Update-practicas/:id", Cempresa.UpdatePractica)
 	router.DELETE("/Delete-practica/:id", Cempresa.DeletePractica)
+	//filtros pagina
+	router.GET("/filtro-practicas", Cempresa.FiltroPracticas)
 
 	router.POST("/upload-image", upload.UploadImageHandler)
 

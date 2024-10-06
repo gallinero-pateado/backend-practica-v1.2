@@ -21,6 +21,9 @@ type practicasRequest struct {
 	Fecha_expiracion   time.Time `json:"Fecha_expiracion"`
 	Id_estado_practica int       `json:"Id_estado_practica"`
 	Fecha_publicacion  time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	Modalidad          string    `json:"Modalidad"`
+	Area_practica      string    `json:"Area_practica"`
+	Jornada            string    `json:"Jornada"`
 }
 
 func UpdatePractica(c *gin.Context) {
@@ -51,6 +54,9 @@ func UpdatePractica(c *gin.Context) {
 	practica.Requisitos = req.Requisitos
 	practica.Fecha_expiracion = req.Fecha_expiracion
 	practica.Fecha_publicacion = localTime
+	practica.Modalidad = req.Modalidad
+	practica.Area_practica = req.Area_practica
+	practica.Jornada = req.Jornada
 
 	// Guardar los cambios en la base de datos
 	if result := database.DB.Save(&practica); result.Error != nil {
