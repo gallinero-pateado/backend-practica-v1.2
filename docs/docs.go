@@ -312,7 +312,7 @@ const docTemplate = `{
         },
         "/upload-image": {
             "post": {
-                "description": "Sube una imagen al bucket de Supabase y devuelve la URL pública",
+                "description": "Sube una imagen a Firebase Storage y actualiza el campo de foto de perfil del usuario autenticado",
                 "consumes": [
                     "multipart/form-data"
                 ],
@@ -325,6 +325,13 @@ const docTemplate = `{
                 "summary": "Subir una imagen de perfil",
                 "parameters": [
                     {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
                         "type": "file",
                         "description": "Imagen a subir",
                         "name": "file",
@@ -334,7 +341,7 @@ const docTemplate = `{
                 ],
                 "responses": {
                     "200": {
-                        "description": "URL de la imagen subida",
+                        "description": "URL de la imagen subida y mensaje de éxito",
                         "schema": {
                             "type": "object",
                             "additionalProperties": {
@@ -343,6 +350,24 @@ const docTemplate = `{
                         }
                     },
                     "400": {
+                        "description": "Error en la solicitud",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Usuario no autenticado",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
                         "description": "Error al subir la imagen",
                         "schema": {
                             "type": "object",

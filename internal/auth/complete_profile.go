@@ -47,13 +47,12 @@ func CompleteProfileHandler(c *gin.Context) {
 		return
 	}
 
-	// Actualizar el perfil en la base de datos, incluyendo la URL de la imagen
+	// Actualizar solo los campos no relacionados con la foto de perfil
 	var usuario models.Usuario
 	result := database.DB.Model(&usuario).Where("firebase_usuario = ?", uid).Updates(models.Usuario{
 		Fecha_nacimiento: req.FechaNacimiento,
 		Ano_ingreso:      req.AnoIngreso,
 		Id_carrera:       req.IdCarrera,
-		Foto_perfil:      req.FotoPerfil, // Se espera que este campo sea la URL de la imagen ya subida
 		PerfilCompletado: true,
 	})
 

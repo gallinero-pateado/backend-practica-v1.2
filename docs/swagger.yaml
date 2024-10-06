@@ -299,8 +299,14 @@ paths:
     post:
       consumes:
       - multipart/form-data
-      description: Sube una imagen al bucket de Supabase y devuelve la URL pública
+      description: Sube una imagen a Firebase Storage y actualiza el campo de foto
+        de perfil del usuario autenticado
       parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
       - description: Imagen a subir
         in: formData
         name: file
@@ -310,12 +316,24 @@ paths:
       - application/json
       responses:
         "200":
-          description: URL de la imagen subida
+          description: URL de la imagen subida y mensaje de éxito
           schema:
             additionalProperties:
               type: string
             type: object
         "400":
+          description: Error en la solicitud
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "401":
+          description: Usuario no autenticado
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
           description: Error al subir la imagen
           schema:
             additionalProperties:
