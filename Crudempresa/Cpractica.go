@@ -21,6 +21,9 @@ type practicaRequest struct {
 	Fecha_expiracion   time.Time `json:"Fecha_expiracion"`
 	Id_estado_practica int       `json:"Id_estado_practica"`
 	Fecha_publicacion  time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	Modalidad          string    `json:"Modalidad"`
+	Area_practica      string    `json:"Area_practica"`
+	Jornada            string    `json:"Jornada"`
 }
 
 func Createpractica(c *gin.Context) {
@@ -44,6 +47,9 @@ func Createpractica(c *gin.Context) {
 		Requisitos:         req.Requisitos,
 		Fecha_expiracion:   req.Fecha_expiracion,
 		Fecha_publicacion:  localTime,
+		Modalidad:          req.Modalidad,
+		Area_practica:      req.Area_practica,
+		Jornada:            req.Jornada,
 		Id_estado_practica: 1,
 	}
 

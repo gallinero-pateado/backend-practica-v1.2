@@ -16,6 +16,9 @@ type Practica struct {
 	Fecha_publicacion  time.Time `gorm:"default:CURRENT_TIMESTAMP"`
 	Fecha_expiracion   time.Time `json:"Fecha_expiracion"`
 	Id_estado_practica int       `json:"Id_estado_practica"`
+	Modalidad          string    `json:"Modalidad"`
+	Area_practica      string    `json:"Area_practica"`
+	Jornada            string    `json:"Jornada"`
 }
 
 // TableName establece el nombre de la tabla para GORM
