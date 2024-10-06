@@ -42,13 +42,13 @@ func main() {
 		log.Fatalf("Error inicializando Firebase: %v", err)
 	}
 
-	// Aquí solo asignamos con `=`, ya que la variable `err` ya fue declarada antes
-	err = storage.InitStorage()
+	// Inicializar Firebase Storage
+	_, err = storage.InitFirebaseStorage()
 	if err != nil {
-		log.Fatalf("Error inicializando Supabase Storage: %v", err)
+		log.Fatalf("Error inicializando Firebase Storage: %v", err)
 	}
 
-	// Registrar rutas
+	//Registrar rutas
 	router := api.SetupRoutes()
 
 	// Agregar la ruta de Swagger
