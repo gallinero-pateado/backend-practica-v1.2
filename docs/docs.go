@@ -446,10 +446,6 @@ const docTemplate = `{
                 "fecha_nacimiento": {
                     "type": "string"
                 },
-                "foto_perfil": {
-                    "description": "Este campo ahora recibirá la URL de la imagen",
-                    "type": "string"
-                },
                 "id_carrera": {
                     "type": "integer"
                 }

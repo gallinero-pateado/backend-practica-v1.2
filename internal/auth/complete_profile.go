@@ -12,7 +12,6 @@ type ProfileUpdateRequest struct {
 	FechaNacimiento string `json:"fecha_nacimiento"`
 	AnoIngreso      string `json:"ano_ingreso"`
 	IdCarrera       uint   `json:"id_carrera"`
-	FotoPerfil      string `json:"foto_perfil"` // Este campo ahora recibirá la URL de la imagen
 }
 
 // SuccessResponse representa la estructura para respuestas exitosas
