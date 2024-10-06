@@ -212,6 +212,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/register_empresa": {
+            "post": {
+                "description": "Crea un nuevo usuario en Firebase y lo guarda en la base de datos local",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "auth"
+                ],
+                "summary": "Registra un nuevo usuario",
+                "parameters": [
+                    {
+                        "description": "Datos del usuario a registrar",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/auth.RegisterRequest_empresa"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Usuario registrado correctamente",
+                        "schema": {
+                            "$ref": "#/definitions/auth.RegisterResponse_empresa"
+                        }
+                    },
+                    "400": {
+                        "description": "Solicitud inválida",
+                        "schema": {
+                            "$ref": "#/definitions/auth.RegisterResponse_empresa"
+                        }
+                    },
+                    "500": {
+                        "description": "Error interno del servidor",
+                        "schema": {
+                            "$ref": "#/definitions/auth.RegisterResponse_empresa"
+                        }
+                    }
+                }
+            }
+        },
         "/resend-verification": {
             "post": {
                 "description": "Reenvía el correo de verificación a un usuario registrado",
@@ -407,7 +453,37 @@ const docTemplate = `{
                 }
             }
         },
+        "auth.RegisterRequest_empresa": {
+            "type": "object",
+            "required": [
+                "Email_empresa",
+                "Nombre_empresa",
+                "password"
+            ],
+            "properties": {
+                "Email_empresa": {
+                    "type": "string"
+                },
+                "Nombre_empresa": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
         "auth.RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "firebase_uid": {
+                    "type": "string"
+                },
+                "message": {
+                    "type": "string"
+                }
+            }
+        },
+        "auth.RegisterResponse_empresa": {
             "type": "object",
             "properties": {
                 "firebase_uid": {

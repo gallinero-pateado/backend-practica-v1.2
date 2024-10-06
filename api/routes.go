@@ -22,6 +22,7 @@ func SetupRoutes() *gin.Engine {
 
 	router.POST("/register", auth.RegisterHandler)
 	router.POST("/login", auth.LoginHandler)
+	router.POST("/register_empresa", auth.RegisterHandler_empresa)
 	router.GET("/verify-email", auth.VerifyEmailHandler)
 	router.POST("/password-reset", auth.SendPasswordResetEmailHandler)
 	router.POST("/resend-verification", auth.ResendVerificationEmailHandler)
