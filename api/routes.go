@@ -27,6 +27,9 @@ func SetupRoutes() *gin.Engine {
 	router.GET("/verify-email", auth.VerifyEmailHandler)
 	router.POST("/password-reset", auth.SendPasswordResetEmailHandler)
 	router.POST("/resend-verification", auth.ResendVerificationEmailHandler)
+	router.GET("/get-usuario", auth.GetUsuarioByID)
+	router.GET("/get-allusuarios", auth.GetAllUsuarios)
+
 	// rutas crud practicas
 	router.POST("/Create-practicas", Cempresa.Createpractica)
 	router.GET("/Get-practicas", Cempresa.GetAllPracticas)
