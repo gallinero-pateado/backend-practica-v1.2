@@ -9,14 +9,14 @@ import (
 )
 
 // Obtener práctica por ID
-func GetUsuarioByID(c *gin.Context) {
+func GetUsuarioByUID(c *gin.Context) {
 	var usuario models.Usuario
 
 	// Obtener el ID de la práctica desde los parámetros de la URL
-	id := c.Param("id")
+	iud := c.Param("firebase_usuario")
 
 	// Buscar la práctica por ID en la base de datos
-	if err := database.DB.First(&usuario, id).Error; err != nil {
+	if err := database.DB.First(&usuario, iud).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "usuario no encontrada"})
 		return
 	}
